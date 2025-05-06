@@ -1,14 +1,72 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Testing</title>
-    <script type="module" crossorigin src="https://github.com/imamd1/testing-gas/assets/index-B9TgUJOW.js"></script>
-    <link rel="stylesheet" crossorigin href="https://github.com/imamd1/testing-gas/assets/index-Dtn62Xmo.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <title>User Manager</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 2rem auto; }
+    input, button { padding: 0.5rem; margin: 0.25rem 0; width: 100%; }
+    table { width: 100%; margin-top: 1rem; border-collapse: collapse; }
+    td, th { border: 1px solid #ccc; padding: 0.5rem; text-align: left; }
+  </style>
+</head>
+<body>
+  <h1>User Manager</h1>
+  <form id="userForm">
+    <input type="text" id="name" placeholder="Name" required />
+    <input type="email" id="email" placeholder="Email" required />
+    <button type="submit">Add User</button>
+  </form>
+
+  <table id="userTable">
+    <thead>
+      <tr><th>Name</th><th>Email</th><th>Action</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const BASE_URL = 'https://script.google.com/macros/s/AKfycbzMZwJI5OYxJYytM1QQeZAXjwmU2XDlIshAZ_tFvwZ2ohQ5ErkxmAPaKaGyO5y7cW6T5Q/exec';
+
+    const fetchUsers = async () => {
+      const res = await fetch(`${BASE_URL}?route=getAllUsers`);
+      const data = await res.json();
+      const tbody = document.querySelector('#userTable tbody');
+      tbody.innerHTML = '';
+      data.forEach(user => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${user.name}</td>
+          <td>${user.email}</td>
+          <td><button onclick="deleteUser('${user.ID}')">Delete</button></td>
+        `;
+        tbody.appendChild(row);
+      });
+    };
+
+    const deleteUser = async (id) => {
+      await fetch(`${BASE_URL}?route=deleteUser`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      });
+      fetchUsers();
+    };
+
+    document.getElementById('userForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      await fetch(`${BASE_URL}?route=addUser`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email })
+      });
+      e.target.reset();
+      fetchUsers();
+    });
+
+    fetchUsers();
+  </script>
+</body>
 </html>
