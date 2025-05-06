@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>User Manager</title>
+  <title>v2 User Manager</title>
   <style>
     body { font-family: sans-serif; max-width: 600px; margin: 2rem auto; }
     input, button { padding: 0.5rem; margin: 0.25rem 0; width: 100%; }
@@ -11,7 +11,7 @@
   </style>
 </head>
 <body>
-  <h1>User Manager</h1>
+  <h1>v2 User Manager</h1>
   <form id="userForm">
     <input type="text" id="name" placeholder="Name" required />
     <input type="email" id="email" placeholder="Email" required />
@@ -31,7 +31,7 @@
     const fetchUsers = async () => {
       const res = await fetch(`${BASE_URL}?route=getAllUsers`);
       const data = await res.json();
-      console.log(data)
+    //   console.log(data)
       const tbody = document.querySelector('#userTable tbody');
       tbody.innerHTML = '';
       data.forEach(user => {
