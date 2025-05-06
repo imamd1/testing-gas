@@ -37,9 +37,9 @@
       data.forEach(user => {
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td>${user.name}</td>
+          <td>${user.fullname}</td>
           <td>${user.email}</td>
-          <td><button onclick="deleteUser('${user.ID}')">Delete</button></td>
+          <td><button onclick="deleteUser('${user.id}')">Delete</button></td>
         `;
         tbody.appendChild(row);
       });
