@@ -31,7 +31,6 @@
     const fetchUsers = async () => {
       const res = await fetch(`${BASE_URL}?route=getAllUsers`);
       const data = await res.json();
-    //   console.log(data)
       const tbody = document.querySelector('#userTable tbody');
       tbody.innerHTML = '';
       data.forEach(user => {
@@ -47,7 +46,6 @@
 
     const deleteUser = async (id) => {
       await fetch(`${BASE_URL}?route=deleteUser`, {
-        mode: 'no-cors',
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id })
@@ -60,7 +58,6 @@
       const name = document.getElementById('name').value;
       const email = document.getElementById('email').value;
       await fetch(`${BASE_URL}?route=addUser`, {
-        mode: 'no-cors',
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email })
