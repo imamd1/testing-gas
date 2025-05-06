@@ -33,6 +33,7 @@
         mode: 'no-cors',
       });
       const data = await res.json();
+      console.log(data)
       const tbody = document.querySelector('#userTable tbody');
       tbody.innerHTML = '';
       data.forEach(user => {
