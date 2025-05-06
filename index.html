@@ -11,7 +11,7 @@
   </style>
 </head>
 <body>
-  <h1>v2 User Manager</h1>
+  <h1>v3 User Manager</h1>
   <form id="userForm">
     <input type="text" id="name" placeholder="Name" required />
     <input type="email" id="email" placeholder="Email" required />
@@ -26,7 +26,7 @@
   </table>
 
   <script>
-    const BASE_URL = 'https://script.google.com/macros/s/AKfycbylM5iJEB8OO8napbGugcMl0N_Fdfv3rV8wdugA6P6Ck21IVZ5qadk7YWRWwUKqhR8cdA/exec';
+    const BASE_URL = 'https://script.google.com/macros/s/AKfycbzLhavHqldmrM305lgY7NxrhbqBpfQ-nHS-Bfa_t_Ze33Xkgo8Fd9TuAzGjlZiD-vK0oQ/exec';
 
     const fetchUsers = async () => {
       const res = await fetch(`${BASE_URL}?route=getAllUsers`);
@@ -45,11 +45,8 @@
     };
 
     const deleteUser = async (id) => {
-      await fetch(`${BASE_URL}?route=deleteUser`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id })
-      });
+      // gunakan GET daripada POST
+      await fetch(`${BASE_URL}?route=deleteUser&id=${encodeURIComponent(id)}`);
       fetchUsers();
     };
 
@@ -57,11 +54,7 @@
       e.preventDefault();
       const name = document.getElementById('name').value;
       const email = document.getElementById('email').value;
-      await fetch(`${BASE_URL}?route=addUser`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fullname: name, email })
-      });
+      await fetch(`${BASE_URL}?route=addUser&fullname=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`);
       e.target.reset();
       fetchUsers();
     });
