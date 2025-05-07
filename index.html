@@ -17,7 +17,12 @@
   <button onclick="del()">Delete</button>
   <button onclick="read()">Read</button>
 
-  <pre id="output"></pre>
+  <table id="userTable">
+    <thead>
+      <tr><th>Name</th><th>Email</th><th>Action</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbwP-1an3bYevVcWXEFNjwavLIUfoihdmAXNp21FZ7wHiHRm3NoXY2jy62SLUAKH7mFP6A/exec'; // ganti dengan URL Apps Script kamu
@@ -53,12 +58,21 @@
     }
 
     function read() {
-      fetch(API_URL)
-        .then(res => res.json())
-        .then(data => {
-          document.getElementById('output').textContent = JSON.stringify(data, null, 2);
-        });
-    }
+      const res = fetch(API_URL)
+      const data = res.json()
+      const tbody = document.querySelector('#userTable tbody');
+      tbody.innerHTML = '';
+      data.forEach(user => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${user.id}</td>
+          <td>${user.name}</td>
+          <td><button onclick="deleteUser('${user.id}')">Delete</button></td>
+        `;
+        tbody.appendChild(row);
+    })
+  }
+    
 
     function show(response) {
       document.getElementById('output').textContent = JSON.stringify(response, null, 2);
