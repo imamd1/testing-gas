@@ -18,7 +18,7 @@
   <button onclick="update()">Update</button>
   <button onclick="del()">Delete</button>
 
-  <h3>Data Table</h3>
+  <h3>Data Table v2</h3>
   <table id="userTable">
     <thead>
       <tr><th>ID</th><th>Name</th><th>Action</th></tr>
@@ -60,8 +60,8 @@
       }).catch(err => console.error('Error:', err));
     }
 
-    function del() {
-      const id = document.getElementById('id').value;
+    function del(id) {
+    //   const id = document.getElementById('id').value;
       fetch(API_URL + '?action=delete', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -83,20 +83,12 @@
             row.innerHTML = `
               <td>${user.id}</td>
               <td>${user.name}</td>
-              <td><button onclick="deleteUser('${user.id}')">Delete</button></td>
+              <td><button onclick="del('${user.id}')">Delete</button></td>
             `;
             tbody.appendChild(row);
           });
         })
         .catch(err => console.error('Error:', err));
-    }
-
-    function deleteUser(id) {
-      // Function to delete user from table (if necessary)
-      const row = document.querySelector(`tr[data-id='${id}']`);
-      if (row) {
-        row.remove();
-      }
     }
   </script>
 </body>
