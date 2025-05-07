@@ -4,6 +4,8 @@
   <title>CRUD with Apps Script</title>
   <style>
     input { margin: 5px; }
+    table { width: 100%; margin-top: 20px; }
+    th, td { padding: 8px; text-align: left; border: 1px solid #ddd; }
   </style>
 </head>
 <body>
@@ -15,17 +17,22 @@
   <button onclick="create()">Create</button>
   <button onclick="update()">Update</button>
   <button onclick="del()">Delete</button>
-  <button onclick="read()">Read</button>
 
+  <h3>Data Table</h3>
   <table id="userTable">
     <thead>
-      <tr><th>Name</th><th>Email</th><th>Action</th></tr>
+      <tr><th>ID</th><th>Name</th><th>Action</th></tr>
     </thead>
     <tbody></tbody>
   </table>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbwP-1an3bYevVcWXEFNjwavLIUfoihdmAXNp21FZ7wHiHRm3NoXY2jy62SLUAKH7mFP6A/exec'; // ganti dengan URL Apps Script kamu
+    const API_URL = 'https://script.google.com/macros/s/AKfycbyBLyxnWnWOtPvFllgTbByvx5LMMKbIwEDEM78wjIgbz7qG8a-GfF_ukOE7JutMyNilPw/exec'; // ganti dengan URL Apps Script kamu
+
+    // Fungsi untuk mengambil data otomatis ketika halaman dimuat
+    window.onload = function() {
+      read();
+    };
 
     function create() {
       const id = document.getElementById('id').value;
@@ -34,8 +41,10 @@
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ id, name })
-      }).then(res => res.json()).then(show)
-      .catch(err => console.error(err));;
+      }).then(res => res.json()).then(response => {
+        console.log(response);
+        read(); // Memanggil data setelah sukses
+      }).catch(err => console.error('Error:', err));
     }
 
     function update() {
@@ -45,7 +54,10 @@
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ id, name })
-      }).then(res => res.json()).then(show);
+      }).then(res => res.json()).then(response => {
+        console.log(response);
+        read(); // Memanggil data setelah update
+      }).catch(err => console.error('Error:', err));
     }
 
     function del() {
@@ -54,28 +66,37 @@
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ id })
-      }).then(res => res.json()).then(show);
+      }).then(res => res.json()).then(response => {
+        console.log(response);
+        read(); // Memanggil data setelah delete
+      }).catch(err => console.error('Error:', err));
     }
 
     function read() {
-      const res = fetch(API_URL)
-      const data = res.json()
-      const tbody = document.querySelector('#userTable tbody');
-      tbody.innerHTML = '';
-      data.forEach(user => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${user.id}</td>
-          <td>${user.name}</td>
-          <td><button onclick="deleteUser('${user.id}')">Delete</button></td>
-        `;
-        tbody.appendChild(row);
-    })
-  }
-    
+      fetch(API_URL)
+        .then(res => res.json())
+        .then(data => {
+          const tbody = document.querySelector('#userTable tbody');
+          tbody.innerHTML = ''; // Clear table before filling
+          data.forEach(user => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${user.id}</td>
+              <td>${user.name}</td>
+              <td><button onclick="deleteUser('${user.id}')">Delete</button></td>
+            `;
+            tbody.appendChild(row);
+          });
+        })
+        .catch(err => console.error('Error:', err));
+    }
 
-    function show(response) {
-      document.getElementById('output').textContent = JSON.stringify(response, null, 2);
+    function deleteUser(id) {
+      // Function to delete user from table (if necessary)
+      const row = document.querySelector(`tr[data-id='${id}']`);
+      if (row) {
+        row.remove();
+      }
     }
   </script>
 </body>
