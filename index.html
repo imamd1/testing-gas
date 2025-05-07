@@ -27,8 +27,10 @@
       const name = document.getElementById('name').value;
       fetch(API_URL + '?action=create', {
         method: 'POST',
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ id, name })
-      }).then(res => res.json()).then(show);
+      }).then(res => res.json()).then(show)
+      .catch(err => console.error(err));;
     }
 
     function update() {
@@ -36,6 +38,7 @@
       const name = document.getElementById('name').value;
       fetch(API_URL + '?action=update', {
         method: 'POST',
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ id, name })
       }).then(res => res.json()).then(show);
     }
@@ -44,6 +47,7 @@
       const id = document.getElementById('id').value;
       fetch(API_URL + '?action=delete', {
         method: 'POST',
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ id })
       }).then(res => res.json()).then(show);
     }
