@@ -1,65 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>v3 User Manager ~~</title>
+  <title>CRUD with Apps Script</title>
   <style>
-    body { font-family: sans-serif; max-width: 600px; margin: 2rem auto; }
-    input, button { padding: 0.5rem; margin: 0.25rem 0; width: 100%; }
-    table { width: 100%; margin-top: 1rem; border-collapse: collapse; }
-    td, th { border: 1px solid #ccc; padding: 0.5rem; text-align: left; }
+    input { margin: 5px; }
   </style>
 </head>
 <body>
-  <h1>v3 User Manager ~~</h1>
-  <form id="userForm">
-    <input type="text" id="name" placeholder="Name" required />
-    <input type="email" id="email" placeholder="Email" required />
-    <button type="submit">Add User</button>
-  </form>
+  <h2>CRUD Apps Script Demo</h2>
 
-  <table id="userTable">
-    <thead>
-      <tr><th>Name</th><th>Email</th><th>Action</th></tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+  <input type="text" id="id" placeholder="ID">
+  <input type="text" id="name" placeholder="Name">
+  <br>
+  <button onclick="create()">Create</button>
+  <button onclick="update()">Update</button>
+  <button onclick="del()">Delete</button>
+  <button onclick="read()">Read</button>
+
+  <pre id="output"></pre>
 
   <script>
-    const BASE_URL = 'https://script.google.com/macros/s/AKfycbxMieKjOeKlDOM9E-FGBREq-Zs2uAtc0bzDR8N95s7x_iOagCJQncqrgdIrE_v4EveQtg/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxyz123/exec'; // ganti dengan URL Apps Script kamu
 
-    const fetchUsers = async () => {
-      const res = await fetch(`${BASE_URL}?route=getAllUsers`);
-      const data = await res.json();
-      const tbody = document.querySelector('#userTable tbody');
-      tbody.innerHTML = '';
-      data.forEach(user => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${user.fullname}</td>
-          <td>${user.email}</td>
-          <td><button onclick="deleteUser('${user.id}')">Delete</button></td>
-        `;
-        tbody.appendChild(row);
-      });
-    };
-
-    const deleteUser = async (id) => {
-      // gunakan GET daripada POST
-      await fetch(`${BASE_URL}?route=deleteUser&id=${encodeURIComponent(id)}`);
-      fetchUsers();
-    };
-
-    document.getElementById('userForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
+    function create() {
+      const id = document.getElementById('id').value;
       const name = document.getElementById('name').value;
-      const email = document.getElementById('email').value;
-      await fetch(`${BASE_URL}?route=addUser&fullname=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`);
-      e.target.reset();
-      fetchUsers();
-    });
+      fetch(API_URL + '?action=create', {
+        method: 'POST',
+        body: JSON.stringify({ id, name })
+      }).then(res => res.json()).then(show);
+    }
 
-    fetchUsers();
+    function update() {
+      const id = document.getElementById('id').value;
+      const name = document.getElementById('name').value;
+      fetch(API_URL + '?action=update', {
+        method: 'POST',
+        body: JSON.stringify({ id, name })
+      }).then(res => res.json()).then(show);
+    }
+
+    function del() {
+      const id = document.getElementById('id').value;
+      fetch(API_URL + '?action=delete', {
+        method: 'POST',
+        body: JSON.stringify({ id })
+      }).then(res => res.json()).then(show);
+    }
+
+    function read() {
+      fetch(API_URL)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+        });
+    }
+
+    function show(response) {
+      document.getElementById('output').textContent = JSON.stringify(response, null, 2);
+    }
   </script>
 </body>
 </html>
