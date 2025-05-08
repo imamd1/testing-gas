@@ -1,93 +1,129 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>CRUD with Apps Script</title>
-  <style>
-    input { margin: 5px; }
-    table { width: 100%; margin-top: 20px; }
-    th, td { padding: 8px; text-align: left; border: 1px solid #ddd; }
-  </style>
-</head>
-<body>
-  <h2>CRUD Apps Script Demo</h2>
+  <body
+    style="
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f4f4f4;
+      padding: 20px;
+    "
+  >
+    <div
+      style="
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 24px;
+        background: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      "
+    >
+      <div style="padding: 0px">
+        <img
+          src="./Group 547.png"
+          width="100%"
+          align-items="left"
+          alt="Header Labkom"
+        />
+      </div>
 
-  <input type="text" id="id" placeholder="ID">
-  <input type="text" id="name" placeholder="Name">
-  <br>
-  <button onclick="create()">Create</button>
-  <button onclick="update()">Update</button>
-  <!-- <button onclick="del()">Delete</button> -->
+      <p>
+        Yth. Bapak/Ibu Ketua MGMP Biologi, Fisika & Matematika SMA/MA <br />Se-
+        Daerah Istimewa Yogyakarta <br />di tempat
+      </p>
 
-  <h3>Data Table v2</h3>
-  <table id="userTable">
-    <thead>
-      <tr><th>ID</th><th>Name</th><th>Action</th></tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+      <p
+        style="
+          font-size: 14px;
+          font-weight: bold;
+          font-style: italic;
+          text-align: left;
+          margin-bottom: 15px;
+          margin-top: 32px;
+        "
+      >
+        Assalamu’alaikum Wr. Wb.
+      </p>
+      <p style="text-align: justify">
+        Dengan hormat, Bersama ini kami sampaikan bahwa Fakultas Sains dan
+        Teknologi Terapan (FAST) Universitas Ahmad Dahlan (UAD), akan
+        menyelenggarakan
+        <b
+          >Seminar Nasional "Bangkitkan Sains, Cetak Generasi Unggul: Sinergi
+          Sekolah dan Perguruan Tinggi Membangun Masa Depan Sains & Teknologi
+          Indonesia"</b
+        >
+        yang akan dilaksanakan pada :
+      </p>
+      <table style="border-collapse: collapse">
+        <tr style="">
+          <td style="padding: 6px">Hari, Tanggal</td>
+          <td style="padding: 6px">:</td>
+          <td style="padding: 6px">Selasa, 20 Mei 2025</td>
+        </tr>
+        <tr>
+          <td style="padding: 6px">Pukul</td>
+          <td style="padding: 6px">:</td>
+          <td style="padding: 6px">08.00 WIB – 15.00 WIB</td>
+        </tr>
+        <tr>
+          <td style="padding: 6px; vertical-align: top">Opening Speaker</td>
+          <td style="padding: 6px; vertical-align: top">:</td>
+          <td style="padding: 6px">
+            <b>Prof. Dr. Abdul Mu'ti M.Ed.</b><br />
+            (Menteri Pendidikan Dasar dan Menengah)
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 6px; vertical-align: top">Keynote Speaker</td>
+          <td style="padding: 6px; vertical-align: top">:</td>
+          <td style="padding: 6px;">
+            <b>1. Arif Jamali Muis, S.Pd., M.Pd.</b><br />
+            (Staf Khusus Mendikdasmen Bidang Pembelajaran dan Sekolah Unggul)<br />
+            <b>2. Prof. Dr. Julan Hernadi, M.Si.</b><br />
+            (Guru Besar Matematika UAD)<br />
+            <b>3. Dr. Sri Utari, M.Pd.Si.</b><br />
+            (Guru Biologi Berprestasi SMA Negeri 1 Yogyakarta)
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 6px; vertical-align: top">Platform</td>
+          <td style="padding: 6px; vertical-align: top">:</td>
+          <td style="padding: 6px">
+            <i> Blended Learning</i><br />
+            1. Aula Islamic Center Kampus IV UAD<br />
+            Jl. A. Yani (Ringroad Selatan), Tamanan, Banguntapan, Bantul, DIY<br />
+            2. <i>Zoom Meeting</i> (Link menyusul)
+          </td>
+        </tr>
+      </table>
+      <p style="text-align: justify">
+        Sehubungan dengan hal itu, kami mengundang Bapak/Ibu Ketua MGMP Biologi,
+        Fisika & Matematika SMA/MA Se- Daerah Istimewa Yogyakarta untuk
+        menghadiri acara tersebut secara Luring <i>(offline)</i>. Informasi lebih
+        lanjut dapat menghubungi narahubung kami melalui nomor WA <b>+62
+            838-9623-3318 (Djoko Imam Pamungkas, S.Kom.)</b>
+      </p>
 
-  <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbyBLyxnWnWOtPvFllgTbByvx5LMMKbIwEDEM78wjIgbz7qG8a-GfF_ukOE7JutMyNilPw/exec'; // ganti dengan URL Apps Script kamu
+      <br />
+      <p style="text-align: justify">
+        Demikian pemberitahuan ini kami sampaikan, sekaligus sebagai undangan.
+        Atas perhatian dan perkenannya diucapkan terimakasih.
+      </p>
 
-    // Fungsi untuk mengambil data otomatis ketika halaman dimuat
-    window.onload = function() {
-      read();
-    };
-
-    function create() {
-      const id = document.getElementById('id').value;
-      const name = document.getElementById('name').value;
-      fetch(API_URL + '?action=create', {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ id, name })
-      }).then(() => read())
-    }
-
-    function update() {
-      const id = document.getElementById('id').value;
-      const name = document.getElementById('name').value;
-      fetch(API_URL + '?action=update', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ id, name })
-      }).then(res => res.json()).then(response => {
-        console.log(response);
-        read(); // Memanggil data setelah update
-      }).catch(err => console.error('Error:', err));
-    }
-
-    function del(id) {
-    //   const id = document.getElementById('id').value;
-      fetch(API_URL + '?action=delete', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ id })
-      }).then(res => res.json()).then(response => {
-        console.log(response);
-        read(); // Memanggil data setelah delete
-      }).catch(err => console.error('Error:', err));
-    }
-
-    function read() {
-      fetch(API_URL)
-        .then(res => res.json())
-        .then(data => {
-          const tbody = document.querySelector('#userTable tbody');
-          tbody.innerHTML = ''; // Clear table before filling
-          data.forEach(user => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-              <td>${user.id}</td>
-              <td>${user.name}</td>
-              <td><button onclick="del('${user.id}')">Delete</button></td>
-            `;
-            tbody.appendChild(row);
-          });
-        })
-        .catch(err => console.error('Error:', err));
-    }
-  </script>
-</body>
+      <p
+        style="
+          font-size: 14px;
+          font-weight: bold;
+          font-style: italic;
+          text-align: left;
+          margin-bottom: 15px;
+          margin-top: 32px;
+        "
+      >
+        Wassalamu’alaikum wr. wb.
+      </p>
+    </div>
+  </body>
 </html>

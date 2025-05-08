@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CRUD with Apps Script</title>
+  <style>
+    input { margin: 5px; }
+    table { width: 100%; margin-top: 20px; }
+    th, td { padding: 8px; text-align: left; border: 1px solid #ddd; }
+  </style>
+</head>
+<body>
+  <h2>CRUD Apps Script Demo</h2>
+
+  <input type="text" id="id" placeholder="ID">
+  <input type="text" id="name" placeholder="Name">
+  <br>
+  <button onclick="create()">Create</button>
+  <button onclick="update()">Update</button>
+  <!-- <button onclick="del()">Delete</button> -->
+
+  <h3>Data Table v2</h3>
+  <table id="userTable">
+    <thead>
+      <tr><th>ID</th><th>Name</th><th>Action</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbyBLyxnWnWOtPvFllgTbByvx5LMMKbIwEDEM78wjIgbz7qG8a-GfF_ukOE7JutMyNilPw/exec'; // ganti dengan URL Apps Script kamu
+
+    // Fungsi untuk mengambil data otomatis ketika halaman dimuat
+    window.onload = function() {
+      read();
+    };
+
+    function create() {
+      const id = document.getElementById('id').value;
+      const name = document.getElementById('name').value;
+      fetch(API_URL + '?action=create', {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ id, name })
+      }).then(() => read())
+    }
+
+    function update() {
+      const id = document.getElementById('id').value;
+      const name = document.getElementById('name').value;
+      fetch(API_URL + '?action=update', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ id, name })
+      }).then(res => res.json()).then(response => {
+        console.log(response);
+        read(); // Memanggil data setelah update
+      }).catch(err => console.error('Error:', err));
+    }
+
+    function del(id) {
+    //   const id = document.getElementById('id').value;
+      fetch(API_URL + '?action=delete', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ id })
+      }).then(res => res.json()).then(response => {
+        console.log(response);
+        read(); // Memanggil data setelah delete
+      }).catch(err => console.error('Error:', err));
+    }
+
+    function read() {
+      fetch(API_URL)
+        .then(res => res.json())
+        .then(data => {
+          const tbody = document.querySelector('#userTable tbody');
+          tbody.innerHTML = ''; // Clear table before filling
+          data.forEach(user => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${user.id}</td>
+              <td>${user.name}</td>
+              <td><button onclick="del('${user.id}')">Delete</button></td>
+            `;
+            tbody.appendChild(row);
+          });
+        })
+        .catch(err => console.error('Error:', err));
+    }
+  </script>
+</body>
+</html>
